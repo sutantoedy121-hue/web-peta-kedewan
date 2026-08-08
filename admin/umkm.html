@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UMKM · Admin Kedewan</title>
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body data-page="umkm">
+<div class="admin-shell">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__brand">
+      <span class="sidebar__brand-icon" id="sidebarBrandIcon">
+        <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="currentColor" stroke-width="1.4"/><path d="M20 8v24M8 20h24" stroke="currentColor" stroke-width="1.4"/><circle cx="20" cy="20" r="4" fill="currentColor"/></svg>
+      </span>
+      <span>
+        <strong id="sidebarBrandName">Kedewan</strong>
+        <small>Panel Admin</small>
+      </span>
+    </div>
+
+    <div class="sidebar__section-label">Menu Konten</div>
+    <nav class="sidebar__nav" id="sidebarNav">
+      <a href="index.html" data-menu="dashboard">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-16v5h6V4h-6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+        Dashboard
+      </a>
+      <a href="lokasi.html" data-menu="lokasi">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        Titik Lokasi
+      </a>
+      <a href="umkm.html" data-menu="umkm" class="is-active">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 9v11h16V9M2 9l2-5h16l2 5M2 9h20M9 13v3M15 13v3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+        UMKM
+      </a>
+      <a href="tim-pengembang.html" data-menu="tim-pengembang">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 20c.6-3.4 3-5.4 5.5-5.4S14.4 16.6 15 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17.5" cy="8.5" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M15.8 14.3c2.3.2 4 1.9 4.5 4.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+        Tim Pengembang
+      </a>
+    </nav>
+
+    <div class="sidebar__section-label">Pengaturan</div>
+    <nav class="sidebar__nav">
+      <a href="pengaturan.html" data-menu="pengaturan">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M10.3 3.2c.3-1.1 1.9-1.1 2.2 0l.2.9c.2.7 1 1.1 1.6.8l.8-.4c1-.5 2.1.5 1.6 1.6l-.4.8c-.3.6.1 1.4.8 1.6l.9.2c1.1.3 1.1 1.9 0 2.2l-.9.2c-.7.2-1.1 1-.8 1.6l.4.8c.5 1-.5 2.1-1.6 1.6l-.8-.4c-.6-.3-1.4.1-1.6.8l-.2.9c-.3 1.1-1.9 1.1-2.2 0l-.2-.9c-.2-.7-1-1.1-1.6-.8l-.8.4c-1 .5-2.1-.5-1.6-1.6l.4-.8c.3-.6-.1-1.4-.8-1.6l-.9-.2c-1.1-.3-1.1-1.9 0-2.2l.9-.2c.7-.2 1.1-1 .8-1.6l-.4-.8c-.5-1 .5-2.1 1.6-1.6l.8.4c.6.3 1.4-.1 1.6-.8l.2-.9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.5"/></svg></span>
+        Pengaturan Situs
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a href="../index.html" target="_blank">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M14 4h6v6M20 4 10 14M6 4H4v16h16v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        Lihat Situs Publik
+      </a>
+      <a href="#" data-logout>
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        Keluar
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="topbar__title">
+          <h1>UMKM</h1>
+          <p>Kelola produk UMKM warga yang tampil di beranda situs publik</p>
+        </div>
+      </div>
+      <div class="topbar__right">
+        <div class="topbar__user">
+          <div class="topbar__avatar" data-admin-initial>·</div>
+          <div class="topbar__user-meta">
+            <strong data-admin-email>Memuat…</strong>
+            <small>Admin</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h2>Produk UMKM</h2>
+          <p>Tambah, ubah, atau hapus produk UMKM beserta foto, deskripsi, dan nomor WhatsApp pemiliknya.</p>
+        </div>
+        <button type="button" class="btn btn--primary" id="btnAddUmkm">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Tambah UMKM
+        </button>
+      </div>
+
+      <div id="umkmAlert" class="alert" style="display:none;"></div>
+
+      <!-- ============ Info Biaya Upload Produk ============ -->
+      <div class="table-card" style="padding:20px 24px; margin-bottom:20px;">
+        <h3 style="margin:0 0 4px; font-size:1rem;">Info Biaya Upload Produk</h3>
+        <p style="margin:0 0 16px; font-size:0.85rem; color:var(--text-muted, #6b7280);">
+          Teks & nomor WhatsApp ini tampil sebagai box "Mau jual produkmu di sini?" di halaman publik UMKM (di atas footer).
+          Kosongkan kedua field untuk menyembunyikan box tersebut.
+        </p>
+        <form id="formUmkmFee">
+          <div class="field-row">
+            <div class="field">
+              <label for="umkm_fee">Biaya Pendaftaran (opsional)</label>
+              <input type="text" id="umkm_fee" placeholder="mis. Rp 5.000">
+            </div>
+            <div class="field">
+              <label for="umkm_fee_wa">Nomor WhatsApp Kontak</label>
+              <input type="text" id="umkm_fee_wa" placeholder="mis. 08123456789">
+            </div>
+          </div>
+          <button type="submit" class="btn btn--primary" id="saveUmkmFeeBtn">Simpan Info Biaya</button>
+        </form>
+      </div>
+
+      <div class="toolbar">
+        <div class="toolbar__search">
+          <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input type="text" id="searchInput" placeholder="Cari nama produk/pemilik…">
+        </div>
+        <select id="filterKategori">
+          <option value="">Semua Kategori</option>
+        </select>
+        <select id="filterDesa">
+          <option value="">Semua Desa</option>
+        </select>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:64px;">Foto</th>
+                <th>Produk</th>
+                <th>Kategori</th>
+                <th>Desa</th>
+                <th>Harga</th>
+                <th>Kontak WA</th>
+                <th style="width:140px;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="umkmTableBody">
+              <tr><td colspan="7"><div class="empty-state">Memuat data…</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ Modal Tambah/Edit UMKM ============ -->
+<div class="modal-overlay" id="umkmModal" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-card__head">
+      <h3 id="modalTitle">Tambah Produk UMKM</h3>
+      <button type="button" class="modal-close" id="btnCloseModal" aria-label="Tutup">
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <form id="formUmkm" class="modal-card__body">
+      <input type="hidden" id="umkm_id">
+
+      <div class="field">
+        <label for="nama_produk">Nama Produk/Usaha <span style="color:var(--red-500)">*</span></label>
+        <input type="text" id="nama_produk" required placeholder="mis. Keripik Tempe Bu Sri">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="nama_pemilik">Nama Pemilik</label>
+          <input type="text" id="nama_pemilik" placeholder="mis. Sri Wahyuni">
+        </div>
+        <div class="field">
+          <label for="harga">Harga (opsional)</label>
+          <input type="text" id="harga" placeholder="mis. Rp 15.000 / bungkus">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="kategori_id">Kategori</label>
+          <select id="kategori_id">
+            <option value="">Pilih kategori…</option>
+          </select>
+          <span class="hint">Kategori tidak ada di daftar? Ketik nama baru lalu klik "Tambah" di sebelah kanan.</span>
+        </div>
+        <div class="field">
+          <label for="desa_id">Letak Desa <span style="color:var(--red-500)">*</span></label>
+          <select id="desa_id" required>
+            <option value="">Pilih desa…</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inline-add">
+        <input type="text" id="newKategoriInput" placeholder="Tambah kategori baru…">
+        <button type="button" class="btn btn--outline btn--sm" id="btnAddKategori">Tambah Kategori</button>
+      </div>
+
+      <div class="field">
+        <label for="no_wa">Nomor WhatsApp <span style="color:var(--red-500)">*</span></label>
+        <input type="text" id="no_wa" required placeholder="mis. 08123456789 atau 62812345678">
+        <span class="hint">Boleh diketik format apa saja (08xxx, +62xxx, 62xxx) — akan otomatis dirapikan supaya bisa langsung dihubungi lewat tombol WhatsApp.</span>
+      </div>
+
+      <div class="field">
+        <label for="alamat">Alamat (opsional)</label>
+        <input type="text" id="alamat" placeholder="mis. Dusun Krajan RT 02/RW 01">
+      </div>
+
+      <div class="field">
+        <label for="deskripsi">Deskripsi</label>
+        <textarea id="deskripsi" rows="3" placeholder="Ceritakan singkat tentang produk/usaha ini…"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="gambar_file">Foto Produk</label>
+        <input type="file" id="gambar_file" accept="image/png,image/jpeg,image/jpg,image/webp" multiple>
+        <span class="hint" id="gambarUploadStatus">Bisa unggah lebih dari 1 foto sekaligus (maks. 3MB / foto). Foto pertama jadi foto sampul.</span>
+        <div class="image-grid" id="imageGrid"></div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--outline" id="btnCancelModal">Batal</button>
+        <button type="submit" class="btn btn--primary" id="btnSaveUmkm">Simpan Produk UMKM</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="js/admin-brand.js"></script>
+<script src="js/admin-auth.js"></script>
+<script src="js/admin-partials.js"></script>
+<script src="js/admin-ui.js"></script>
+<script src="js/umkm.js"></script>
+</body>
+</html>
