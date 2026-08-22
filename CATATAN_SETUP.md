@@ -106,3 +106,41 @@ sekarang cuma mengisi data dinamis (logo, nama situs, jam layanan,
 sosial media di footer) ke markup yang sudah ada — tidak lagi
 nge-fetch HTML apa pun, dan tidak lagi menulis markup header
 (itu sekarang tugas `js/header.js`).
+
+---
+
+# Catatan Setup — Fitur Prioritas/Pilih Tampil di Beranda (Titik Lokasi & UMKM)
+
+Sebelumnya, preview Titik Lokasi & UMKM di Beranda publik SELALU
+menampilkan 4 data yang terbaru ditambahkan (`order by created_at
+desc limit 4`) — admin tidak bisa memilih atau mengatur urutannya.
+
+Sekarang admin bisa:
+- **Memilih** titik lokasi/UMKM mana saja yang boleh tampil di
+  Beranda (switch "Tampil di Beranda" — bisa langsung diklik dari
+  kolom **Beranda** di tabel `admin/lokasi.html` & `admin/umkm.html`,
+  atau lewat checkbox di form Tambah/Ubah).
+- **Memprioritaskan urutan tampil** lewat angka "Urutan Prioritas
+  Beranda" (juga bisa diisi langsung dari tabel) — angka lebih kecil
+  tampil lebih dulu. Kalau dikosongkan, item tsb tetap jadi kandidat
+  (asal switch-nya nyala) dan diurutkan berdasarkan yang terbaru,
+  ditaruh setelah semua item yang sudah punya angka prioritas.
+
+Jalankan **migration_beranda_priority.sql** di Supabase SQL Editor
+(sekali saja) sebelum pakai fitur ini — ini menambah kolom
+`tampil_beranda` (boolean, default `true` supaya data lama tidak
+tiba-tiba hilang dari Beranda) dan `urutan_beranda` (angka, boleh
+kosong) ke tabel `lokasi` dan `umkm`.
+
+File terkait:
+- `migration_beranda_priority.sql` — migrasi kolom di atas.
+- `js/main.js` (`loadLokasiPreview`, `loadUmkmPreview`) — query
+  Beranda publik sekarang filter `tampil_beranda = true` lalu urutkan
+  berdasarkan `urutan_beranda` (kosong ditaruh belakang), baru
+  `created_at`.
+- `admin/lokasi.html` + `admin/js/lokasi.js`, `admin/umkm.html` +
+  `admin/js/umkm.js` — kolom "Beranda" di tabel (switch + input
+  angka, langsung tersimpan ke Supabase tiap diubah) dan field
+  checkbox + angka prioritas di form Tambah/Ubah.
+- `admin/css/admin.css` (bagian "TOGGLE 'TAMPIL DI BERANDA'") —
+  style switch & input angka di tabel.

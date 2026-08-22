@@ -143,11 +143,12 @@
                 <th>Desa</th>
                 <th>Harga</th>
                 <th>Kontak WA</th>
+                <th style="width:120px;">Beranda</th>
                 <th style="width:140px;">Aksi</th>
               </tr>
             </thead>
             <tbody id="umkmTableBody">
-              <tr><td colspan="7"><div class="empty-state">Memuat data…</div></td></tr>
+              <tr><td colspan="8"><div class="empty-state">Memuat data…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -227,6 +228,20 @@
         <input type="file" id="gambar_file" accept="image/png,image/jpeg,image/jpg,image/webp" multiple>
         <span class="hint" id="gambarUploadStatus">Bisa unggah lebih dari 1 foto sekaligus (maks. 3MB / foto). Foto pertama jadi foto sampul.</span>
         <div class="image-grid" id="imageGrid"></div>
+      </div>
+
+      <div class="checkbox-field">
+        <input type="checkbox" id="tampil_beranda" checked>
+        <label for="tampil_beranda">
+          Tampilkan di Beranda Publik
+          <span class="hint">Kalau dicentang, produk UMKM ini jadi kandidat tampil di preview Beranda. Bisa juga diatur cepat lewat switch di tabel.</span>
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="urutan_beranda">Urutan Prioritas Beranda (opsional)</label>
+        <input type="number" id="urutan_beranda" placeholder="mis. 1" min="0" step="1">
+        <span class="hint">Angka lebih kecil tampil lebih dulu di Beranda. Kosongkan kalau tidak perlu diprioritaskan — otomatis diurutkan dari yang terbaru.</span>
       </div>
 
       <div class="form-actions">

@@ -146,13 +146,13 @@ async function addKategoriBaru() {
 // ---------- Load & render tabel umkm ----------
 async function loadUmkm() {
   const tbody = document.getElementById('umkmTableBody');
-  tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">Memuat data…</div></td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">Memuat data…</div></td></tr>`;
 
   try {
     const { data, error } = await withTimeout(
       supabaseClient
         .from('umkm')
-        .select('id, nama_produk, nama_pemilik, harga, deskripsi, alamat, no_wa, gambar_url, gambar_urls, kategori_id, desa_id, kategori:kategori_id ( nama_kategori ), desa:desa_id ( nama_desa )')
+        .select('id, nama_produk, nama_pemilik, harga, deskripsi, alamat, no_wa, gambar_url, gambar_urls, kategori_id, desa_id, tampil_beranda, urutan_beranda, kategori:kategori_id ( nama_kategori ), desa:desa_id ( nama_desa )')
         .order('created_at', { ascending: false }),
       8000
     );
@@ -161,7 +161,7 @@ async function loadUmkm() {
     renderTable();
   } catch (err) {
     console.error('Gagal memuat data UMKM:', err);
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state" style="color:#c94040;">Gagal memuat data. ${
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state" style="color:#c94040;">Gagal memuat data. ${
       err.message === 'TIMEOUT'
         ? 'Waktu tunggu habis.'
         : 'Pastikan tabel "umkm" sudah dibuat (lihat migration_umkm.sql).'
@@ -183,7 +183,7 @@ function renderTable() {
   });
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state">
       <div class="ic">🏪</div>${umkmList.length === 0
         ? 'Belum ada produk UMKM. Klik "Tambah UMKM" untuk menambahkan.'
         : 'Tidak ada produk UMKM yang cocok dengan pencarian/filter.'}
@@ -206,6 +206,15 @@ function renderTable() {
       <td>${escapeHtml(row.desa?.nama_desa || '–')}</td>
       <td>${escapeHtml(row.harga || '–')}</td>
       <td>${waNumber ? `<span class="badge badge--green">${escapeHtml(waNumber)}</span>` : '<span class="badge badge--gray">Belum ada</span>'}</td>
+      <td>
+        <div class="beranda-cell" title="Tampil di Beranda Publik">
+          <label class="switch">
+            <input type="checkbox" data-beranda-toggle="${row.id}" ${row.tampil_beranda !== false ? 'checked' : ''}>
+            <span class="switch__slider"></span>
+          </label>
+          <input type="number" class="beranda-cell__order" data-beranda-urutan="${row.id}" value="${row.urutan_beranda ?? ''}" placeholder="–" min="0" step="1" title="Urutan prioritas (kosong = terbaru dulu)" ${row.tampil_beranda === false ? 'disabled' : ''}>
+        </div>
+      </td>
       <td>
         <div class="row-actions">
           <button type="button" class="icon-btn ${waNumber ? 'icon-btn--whatsapp' : 'icon-btn--disabled'}" data-wa="${waNumber}" title="${waNumber ? 'Hubungi via WhatsApp' : 'Nomor WhatsApp belum diisi'}" ${waNumber ? '' : 'disabled'}>
@@ -238,6 +247,41 @@ function renderTable() {
   tbody.querySelectorAll('[data-delete]').forEach(btn => {
     btn.addEventListener('click', () => deleteUmkm(btn.dataset.delete));
   });
+  tbody.querySelectorAll('[data-beranda-toggle]').forEach(input => {
+    input.addEventListener('change', () => {
+      const id = input.dataset.berandaToggle;
+      const orderInput = tbody.querySelector(`[data-beranda-urutan="${id}"]`);
+      if (orderInput) orderInput.disabled = !input.checked;
+      updateBerandaField(id, { tampil_beranda: input.checked });
+    });
+  });
+  tbody.querySelectorAll('[data-beranda-urutan]').forEach(input => {
+    input.addEventListener('change', () => {
+      const id = input.dataset.berandaUrutan;
+      const raw = input.value.trim();
+      updateBerandaField(id, { urutan_beranda: raw === '' ? null : parseInt(raw, 10) });
+    });
+  });
+}
+
+// ---------- Update cepat "Tampil di Beranda" / urutan prioritas dari tabel ----------
+async function updateBerandaField(id, patch) {
+  try {
+    const { error } = await supabaseClient.from('umkm').update(patch).eq('id', id);
+    if (error) throw error;
+    const row = umkmList.find(r => String(r.id) === String(id));
+    if (row) Object.assign(row, patch);
+    showAlert(
+      'tampil_beranda' in patch
+        ? (patch.tampil_beranda ? 'Produk UMKM akan tampil di Beranda.' : 'Produk UMKM disembunyikan dari Beranda.')
+        : 'Urutan prioritas Beranda berhasil diperbarui.',
+      'success'
+    );
+  } catch (err) {
+    console.error('Gagal memperbarui pengaturan Beranda:', err);
+    showAlert('Gagal memperbarui pengaturan Beranda: ' + (err.message || err), 'error');
+    loadUmkm();
+  }
 }
 
 // ---------- Upload gambar ----------
@@ -327,6 +371,8 @@ function openModal(mode, row) {
   document.getElementById('no_wa').value = row ? row.no_wa || '' : '';
   document.getElementById('alamat').value = row ? row.alamat || '' : '';
   document.getElementById('deskripsi').value = row ? row.deskripsi || '' : '';
+  document.getElementById('tampil_beranda').checked = row ? row.tampil_beranda !== false : true;
+  document.getElementById('urutan_beranda').value = row && row.urutan_beranda != null ? row.urutan_beranda : '';
   document.getElementById('newKategoriInput').value = '';
   document.getElementById('gambar_file').value = '';
   document.getElementById('gambarUploadStatus').textContent = 'Bisa unggah lebih dari 1 foto sekaligus (maks. 3MB / foto). Foto pertama jadi foto sampul.';
@@ -368,6 +414,7 @@ async function saveUmkm(e) {
   btn.textContent = 'Menyimpan…';
 
   const gambarUrls = currentImages.map(img => img.url);
+  const urutanBerandaRaw = document.getElementById('urutan_beranda').value.trim();
   const payload = {
     nama_produk: namaProduk,
     nama_pemilik: document.getElementById('nama_pemilik').value.trim() || null,
@@ -379,6 +426,8 @@ async function saveUmkm(e) {
     alamat: document.getElementById('alamat').value.trim() || null,
     gambar_url: gambarUrls[0] || null,
     gambar_urls: gambarUrls,
+    tampil_beranda: document.getElementById('tampil_beranda').checked,
+    urutan_beranda: urutanBerandaRaw === '' ? null : parseInt(urutanBerandaRaw, 10),
     updated_at: new Date().toISOString(),
   };
 

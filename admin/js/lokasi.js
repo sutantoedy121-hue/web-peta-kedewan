@@ -145,13 +145,13 @@ async function addKategoriBaru() {
 // ---------- Load & render tabel lokasi ----------
 async function loadLokasi() {
   const tbody = document.getElementById('lokasiTableBody');
-  tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Memuat data…</div></td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">Memuat data…</div></td></tr>`;
 
   try {
     const { data, error } = await withTimeout(
       supabaseClient
         .from('lokasi')
-        .select('id, nama_lokasi, deskripsi, embed_code, gambar_url, gambar_urls, kategori_id, desa_id, kategori:kategori_id ( nama_kategori ), desa:desa_id ( nama_desa )')
+        .select('id, nama_lokasi, deskripsi, embed_code, gambar_url, gambar_urls, kategori_id, desa_id, tampil_beranda, urutan_beranda, kategori:kategori_id ( nama_kategori ), desa:desa_id ( nama_desa )')
         .order('created_at', { ascending: false }),
       8000
     );
@@ -160,7 +160,7 @@ async function loadLokasi() {
     renderTable();
   } catch (err) {
     console.error('Gagal memuat titik lokasi:', err);
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state" style="color:#c94040;">Gagal memuat data. ${
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state" style="color:#c94040;">Gagal memuat data. ${
       err.message === 'TIMEOUT'
         ? 'Waktu tunggu habis.'
         : 'Pastikan tabel "lokasi" sudah dibuat (lihat migration_lokasi.sql).'
@@ -182,7 +182,7 @@ function renderTable() {
   });
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state">
       <div class="ic">📍</div>${lokasiList.length === 0
         ? 'Belum ada titik lokasi. Klik "Tambah Titik Lokasi" untuk menambahkan.'
         : 'Tidak ada titik lokasi yang cocok dengan pencarian/filter.'}
@@ -199,6 +199,15 @@ function renderTable() {
       <td>${row.kategori?.nama_kategori ? `<span class="badge badge--blue">${escapeHtml(row.kategori.nama_kategori)}</span>` : '<span class="badge badge--gray">–</span>'}</td>
       <td>${escapeHtml(row.desa?.nama_desa || '–')}</td>
       <td class="col-deskripsi">${escapeHtml((row.deskripsi || '').slice(0, 80)) || '<span style="color:var(--ink-soft)">–</span>'}${(row.deskripsi || '').length > 80 ? '…' : ''}</td>
+      <td>
+        <div class="beranda-cell" title="Tampil di Beranda Publik">
+          <label class="switch">
+            <input type="checkbox" data-beranda-toggle="${row.id}" ${row.tampil_beranda !== false ? 'checked' : ''}>
+            <span class="switch__slider"></span>
+          </label>
+          <input type="number" class="beranda-cell__order" data-beranda-urutan="${row.id}" value="${row.urutan_beranda ?? ''}" placeholder="–" min="0" step="1" title="Urutan prioritas (kosong = terbaru dulu)" ${row.tampil_beranda === false ? 'disabled' : ''}>
+        </div>
+      </td>
       <td>
         <div class="row-actions">
           <button type="button" class="icon-btn" data-edit="${row.id}" title="Edit">
@@ -221,6 +230,41 @@ function renderTable() {
   tbody.querySelectorAll('[data-delete]').forEach(btn => {
     btn.addEventListener('click', () => deleteLokasi(btn.dataset.delete));
   });
+  tbody.querySelectorAll('[data-beranda-toggle]').forEach(input => {
+    input.addEventListener('change', () => {
+      const id = input.dataset.berandaToggle;
+      const orderInput = tbody.querySelector(`[data-beranda-urutan="${id}"]`);
+      if (orderInput) orderInput.disabled = !input.checked;
+      updateBerandaField(id, { tampil_beranda: input.checked });
+    });
+  });
+  tbody.querySelectorAll('[data-beranda-urutan]').forEach(input => {
+    input.addEventListener('change', () => {
+      const id = input.dataset.berandaUrutan;
+      const raw = input.value.trim();
+      updateBerandaField(id, { urutan_beranda: raw === '' ? null : parseInt(raw, 10) });
+    });
+  });
+}
+
+// ---------- Update cepat "Tampil di Beranda" / urutan prioritas dari tabel ----------
+async function updateBerandaField(id, patch) {
+  try {
+    const { error } = await supabaseClient.from('lokasi').update(patch).eq('id', id);
+    if (error) throw error;
+    const row = lokasiList.find(r => String(r.id) === String(id));
+    if (row) Object.assign(row, patch);
+    showAlert(
+      'tampil_beranda' in patch
+        ? (patch.tampil_beranda ? 'Titik lokasi akan tampil di Beranda.' : 'Titik lokasi disembunyikan dari Beranda.')
+        : 'Urutan prioritas Beranda berhasil diperbarui.',
+      'success'
+    );
+  } catch (err) {
+    console.error('Gagal memperbarui pengaturan Beranda:', err);
+    showAlert('Gagal memperbarui pengaturan Beranda: ' + (err.message || err), 'error');
+    loadLokasi();
+  }
 }
 
 // ---------- Upload gambar ----------
@@ -307,6 +351,8 @@ function openModal(mode, row) {
   document.getElementById('desa_id').value = row ? (row.desa_id || '') : '';
   document.getElementById('deskripsi').value = row ? row.deskripsi || '' : '';
   document.getElementById('embed_code').value = row ? row.embed_code || '' : '';
+  document.getElementById('tampil_beranda').checked = row ? row.tampil_beranda !== false : true;
+  document.getElementById('urutan_beranda').value = row && row.urutan_beranda != null ? row.urutan_beranda : '';
   document.getElementById('newKategoriInput').value = '';
   document.getElementById('gambar_file').value = '';
   document.getElementById('gambarUploadStatus').textContent = 'Bisa unggah lebih dari 1 foto sekaligus (maks. 3MB / foto). Foto pertama jadi foto sampul.';
@@ -349,6 +395,7 @@ async function saveLokasi(e) {
   btn.textContent = 'Menyimpan…';
 
   const gambarUrls = currentImages.map(img => img.url);
+  const urutanBerandaRaw = document.getElementById('urutan_beranda').value.trim();
   const payload = {
     nama_lokasi: namaLokasi,
     kategori_id: kategoriId,
@@ -357,6 +404,8 @@ async function saveLokasi(e) {
     embed_code: embedSrc || null,
     gambar_url: gambarUrls[0] || null,
     gambar_urls: gambarUrls,
+    tampil_beranda: document.getElementById('tampil_beranda').checked,
+    urutan_beranda: urutanBerandaRaw === '' ? null : parseInt(urutanBerandaRaw, 10),
     updated_at: new Date().toISOString(),
   };
 

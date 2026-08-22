@@ -20,9 +20,14 @@ function escapeHtml(str) {
 // ---------- Titik Lokasi preview ----------
 async function loadLokasiPreview() {
   const grid = document.getElementById('lokasi-grid');
+  // Hanya titik lokasi yang ditandai admin "Tampil di Beranda" yang jadi
+  // kandidat. Yang punya urutan_beranda (angka prioritas) tampil lebih
+  // dulu sesuai urutan angkanya, sisanya diisi dari yang terbaru.
   const { data, error } = await supabaseClient
     .from('lokasi')
     .select(`id, nama_lokasi, gambar_url, deskripsi, desa:desa_id ( nama_desa ), kategori:kategori_id ( nama_kategori )`)
+    .eq('tampil_beranda', true)
+    .order('urutan_beranda', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false })
     .limit(4);
 
@@ -65,9 +70,14 @@ async function loadLokasiPreview() {
 // ---------- UMKM preview ----------
 async function loadUmkmPreview() {
   const grid = document.getElementById('umkm-grid');
+  // Sama seperti Titik Lokasi: hanya produk UMKM yang ditandai admin
+  // "Tampil di Beranda" yang jadi kandidat, dan yang punya urutan_beranda
+  // (angka prioritas) tampil lebih dulu sesuai urutan angkanya.
   const { data, error } = await supabaseClient
     .from('umkm')
     .select(`id, nama_produk, gambar_url, deskripsi, no_wa, harga, desa:desa_id ( nama_desa ), kategori:kategori_id ( nama_kategori )`)
+    .eq('tampil_beranda', true)
+    .order('urutan_beranda', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false })
     .limit(4);
 
