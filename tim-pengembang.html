@@ -31,9 +31,29 @@
 <section class="section" style="padding-top:48px;">
   <div class="container">
 
+    <!--
+      Development Team (Tim Inti) — 5 anggota yang benar-benar
+      mengerjakan pembangunan situs ini, BEDA dari daftar umum "Tim KKM
+      Kelompok 05" di bawah. Diambil dari Supabase tabel `tim_inti`
+      lewat js/tim-inti-page.js — kelola lewat Panel Admin -> Tim Inti
+      (Dev Team): foto, media sosial, dan deskripsi tiap orang bisa
+      diubah dari sana, tidak perlu edit HTML ini lagi.
+    -->
+    <section class="core-team-section">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow" id="devTeamEyebrow">Tim Inti</span>
+          <h2 id="devTeamTitle">Development Team</h2>
+        </div>
+      </div>
+      <div class="core-team-grid" id="core-team-grid">
+        <div class="empty-state">Memuat data…</div>
+      </div>
+    </section>
+
     <div class="team-about">
-      <p><strong>Tentang Proyek</strong></p>
-      <p>Peta Kedewan dibuat untuk membantu warga, pengunjung, dan pemerintah desa mengakses informasi titik lokasi, fasilitas, serta produk UMKM dari 5 desa di Kecamatan Kedewan: Kedewan, Hargomulyo, Wonocolo, Beji, dan Kawengan. Website ini merupakan luaran (output) dari program Kuliah Kerja Mahasiswa (KKM Kelompok 05) IKIP PGRI Bojonegoro dan dikelola bersama oleh tim mahasiswa dan perangkat kecamatan/desa.</p>
+      <p><strong id="tentangProyekJudul">Tentang Proyek</strong></p>
+      <p id="tentangProyekTeks">Peta Kedewan dibuat untuk membantu warga, pengunjung, dan pemerintah desa mengakses informasi titik lokasi, fasilitas, serta produk UMKM dari 5 desa di Kecamatan Kedewan: Kedewan, Hargomulyo, Wonocolo, Beji, dan Kawengan. Website ini merupakan luaran (output) dari program Kuliah Kerja Mahasiswa (KKM Kelompok 05) IKIP PGRI Bojonegoro dan dikelola bersama oleh tim mahasiswa dan perangkat kecamatan/desa.</p>
     </div>
 
     <div class="section-head">
@@ -54,6 +74,17 @@
 
   </div>
 </section>
+
+<!-- Modal detail anggota Development Team (Tim Inti) -->
+<div class="lokasi-modal" id="coreTeamModal" hidden>
+  <div class="lokasi-modal__backdrop" id="coreTeamModalBackdrop"></div>
+  <div class="lokasi-modal__panel person-modal__panel">
+    <button type="button" class="lokasi-modal__close" id="coreTeamModalClose" aria-label="Tutup">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="person-modal__body" id="coreTeamModalBody"></div>
+  </div>
+</div>
 
 <footer class="site-footer" id="footer">
   <div class="container">
@@ -125,7 +156,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="js/config.js?v=2"></script>
 <script src="js/search.js?v=2"></script>
-<script src="js/partials.js?v=3"></script>
+<script src="js/partials.js?v=4"></script>
 <script src="js/tim-pengembang-page.js?v=1"></script>
+<script src="js/tim-inti-page.js?v=1"></script>
 </body>
 </html>

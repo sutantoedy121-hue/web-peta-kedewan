@@ -197,10 +197,12 @@ function initNavToggle() {
 }
 
 // ---------- Lightbox foto: klik gambar di galeri modal (Titik Lokasi /
-// UMKM) untuk melihatnya penuh & besar. Dibuat sekali di sini (bukan di
-// lokasi-page.js / umkm-page.js) karena kedua halaman itu memuat file ini,
-// dan galeri modalnya dirender ulang tiap kali modal dibuka — jadi
-// listener-nya dipasang lewat event delegation di document, bukan per-img.
+// UMKM) atau foto profil di modal detail Tim Inti (Development Team)
+// untuk melihatnya penuh & besar. Dibuat sekali di sini (bukan di
+// lokasi-page.js / umkm-page.js / tim-inti-page.js) karena
+// halaman-halaman itu memuat file ini, dan galeri/modalnya dirender
+// ulang tiap kali modal dibuka — jadi listener-nya dipasang lewat event
+// delegation di document, bukan per-img.
 function initImageLightbox() {
   if (document.getElementById('imgLightbox')) return; // sudah pernah dibuat
 
@@ -230,7 +232,7 @@ function initImageLightbox() {
   // Delegasi: tangkap klik pada foto di dalam galeri modal, di mana pun
   // modalnya berada (id="lokasiModalBody" atau id="umkmModalBody").
   document.addEventListener('click', (e) => {
-    const galleryImg = e.target.closest('.lokasi-modal__gallery img');
+    const galleryImg = e.target.closest('.lokasi-modal__gallery img, .person-modal__photo img');
     if (galleryImg) {
       openLightbox(galleryImg.src, galleryImg.alt);
       return;

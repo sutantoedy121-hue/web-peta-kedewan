@@ -143,6 +143,15 @@ async function loadSettings() {
       document.getElementById('jam_layanan').value = data.jam_layanan || '';
       document.getElementById('logo_url').value = data.logo_url || '';
       updateLogoPreview(data.logo_url || '');
+
+      const devEyebrowEl = document.getElementById('dev_team_eyebrow');
+      const devTitleEl = document.getElementById('dev_team_title');
+      const tentangJudulEl = document.getElementById('tentang_proyek_judul');
+      const tentangTeksEl = document.getElementById('tentang_proyek_teks');
+      if (devEyebrowEl) devEyebrowEl.value = data.dev_team_eyebrow || '';
+      if (devTitleEl) devTitleEl.value = data.dev_team_title || '';
+      if (tentangJudulEl) tentangJudulEl.value = data.tentang_proyek_judul || '';
+      if (tentangTeksEl) tentangTeksEl.value = data.tentang_proyek_teks || '';
     }
   } catch (err) {
     console.error('Gagal memuat pengaturan identitas:', err);
@@ -268,10 +277,44 @@ async function saveMap(e) {
   }
 }
 
+async function saveHalamanTim(e) {
+  e.preventDefault();
+  const btn = document.getElementById('saveHalamanTimBtn');
+  const originalLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan…';
+
+  const payload = {
+    id: 1,
+    dev_team_eyebrow: document.getElementById('dev_team_eyebrow').value.trim() || null,
+    dev_team_title: document.getElementById('dev_team_title').value.trim() || null,
+    tentang_proyek_judul: document.getElementById('tentang_proyek_judul').value.trim() || null,
+    tentang_proyek_teks: document.getElementById('tentang_proyek_teks').value.trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+
+  try {
+    const { error } = await supabaseClient.from('pengaturan').upsert(payload, { onConflict: 'id' });
+    if (error) throw error;
+    showAlert('Halaman Tim Pengembang berhasil disimpan.', 'success');
+  } catch (err) {
+    console.error('Gagal menyimpan halaman tim pengembang:', err);
+    showAlert(
+      'Gagal menyimpan: ' + (err.message || err) + '. Pastikan kolomnya sudah ditambahkan (lihat migration_pengaturan_tim.sql).',
+      'error'
+    );
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   document.getElementById('formIdentitas').addEventListener('submit', saveIdentitas);
   document.getElementById('formMap').addEventListener('submit', saveMap);
+  const formHalamanTim = document.getElementById('formHalamanTim');
+  if (formHalamanTim) formHalamanTim.addEventListener('submit', saveHalamanTim);
 
   const logoFileInput = document.getElementById('logo_file');
   if (logoFileInput) {

@@ -4,10 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="robots" content="noindex, nofollow" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Titik Lokasi · Admin Kedewan</title>
+<title>Tim Inti (Dev Team) · Admin Kedewan</title>
 <link rel="stylesheet" href="css/admin.css" />
 </head>
-<body data-page="lokasi">
+<body data-page="tim-inti">
 <div class="admin-shell">
 
   <aside class="sidebar" id="sidebar">
@@ -27,7 +27,7 @@
         <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-16v5h6V4h-6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
         Dashboard
       </a>
-      <a href="lokasi.html" data-menu="lokasi" class="is-active">
+      <a href="lokasi.html" data-menu="lokasi">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg></span>
         Titik Lokasi
       </a>
@@ -39,7 +39,7 @@
         <span class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 20c.6-3.4 3-5.4 5.5-5.4S14.4 16.6 15 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17.5" cy="8.5" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M15.8 14.3c2.3.2 4 1.9 4.5 4.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
         Tim Pengembang
       </a>
-      <a href="tim-inti.html" data-menu="tim-inti">
+      <a href="tim-inti.html" data-menu="tim-inti" class="is-active">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 14.9 8.3l6.4.9-4.6 4.5 1.1 6.3L12 16.9l-5.8 3.1 1.1-6.3-4.6-4.5 6.4-.9L12 2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
         Tim Inti (Dev Team)
       </a>
@@ -72,8 +72,8 @@
           <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
         <div class="topbar__title">
-          <h1>Titik Lokasi</h1>
-          <p>Kelola titik lokasi yang tampil di beranda situs publik</p>
+          <h1>Tim Inti (Dev Team)</h1>
+          <p>Kelola 5 anggota inti "Development Team" yang tampil di bawah hero halaman Tim Pengembang</p>
         </div>
       </div>
       <div class="topbar__right">
@@ -90,28 +90,22 @@
     <main class="content">
       <div class="page-head">
         <div>
-          <h2>Titik Lokasi</h2>
-          <p>Tambah, ubah, atau hapus titik lokasi (fasilitas umum, wisata, dll) beserta foto, deskripsi, dan letak desanya.</p>
+          <h2>Anggota Development Team</h2>
+          <p>Bagian ini terpisah dari daftar umum "Tim Pengembang" (anggota KKM) — khusus 5 orang yang benar-benar mengerjakan situs, lengkap dengan deskripsi &amp; media sosial yang tampil saat kartunya diklik di situs publik.</p>
         </div>
-        <button type="button" class="btn btn--primary" id="btnAddLokasi">
+        <button type="button" class="btn btn--primary" id="btnAddAnggota">
           <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          Tambah Titik Lokasi
+          Tambah Anggota
         </button>
       </div>
 
-      <div id="lokasiAlert" class="alert" style="display:none;"></div>
+      <div id="timAlert" class="alert" style="display:none;"></div>
 
       <div class="toolbar">
         <div class="toolbar__search">
           <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="searchInput" placeholder="Cari nama lokasi…">
+          <input type="text" id="searchInput" placeholder="Cari nama/jabatan/prodi…">
         </div>
-        <select id="filterKategori">
-          <option value="">Semua Kategori</option>
-        </select>
-        <select id="filterDesa">
-          <option value="">Semua Desa</option>
-        </select>
       </div>
 
       <div class="table-card">
@@ -120,16 +114,15 @@
             <thead>
               <tr>
                 <th style="width:64px;">Foto</th>
-                <th>Nama Lokasi</th>
-                <th>Kategori</th>
-                <th>Desa</th>
-                <th>Deskripsi</th>
-                <th style="width:120px;">Beranda</th>
+                <th>Nama</th>
+                <th>Jabatan</th>
+                <th>Program Studi</th>
+                <th style="width:70px;">Urutan</th>
                 <th style="width:110px;">Aksi</th>
               </tr>
             </thead>
-            <tbody id="lokasiTableBody">
-              <tr><td colspan="7"><div class="empty-state">Memuat data…</div></td></tr>
+            <tbody id="timTableBody">
+              <tr><td colspan="6"><div class="empty-state">Memuat data…</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -138,80 +131,77 @@
   </div>
 </div>
 
-<!-- ============ Modal Tambah/Edit Titik Lokasi ============ -->
-<div class="modal-overlay" id="lokasiModal" style="display:none;">
+<!-- ============ Modal Tambah/Edit Anggota ============ -->
+<div class="modal-overlay" id="timModal" style="display:none;">
   <div class="modal-card">
     <div class="modal-card__head">
-      <h3 id="modalTitle">Tambah Titik Lokasi</h3>
+      <h3 id="modalTitle">Tambah Anggota Development Team</h3>
       <button type="button" class="modal-close" id="btnCloseModal" aria-label="Tutup">
         <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
     </div>
 
-    <form id="formLokasi" class="modal-card__body">
-      <input type="hidden" id="lokasi_id">
+    <form id="formTim" class="modal-card__body">
+      <input type="hidden" id="tim_id">
 
       <div class="field">
-        <label for="nama_lokasi">Nama Lokasi <span style="color:var(--red-500)">*</span></label>
-        <input type="text" id="nama_lokasi" required placeholder="mis. Balai Desa Kedewan">
+        <label for="nama">Nama Lengkap <span style="color:var(--red-500)">*</span></label>
+        <input type="text" id="nama" required placeholder="mis. M. Sailendra Abimanyu">
       </div>
 
       <div class="field-row">
         <div class="field">
-          <label for="kategori_id">Kategori <span style="color:var(--red-500)">*</span></label>
-          <select id="kategori_id" required>
-            <option value="">Pilih kategori…</option>
-          </select>
-          <span class="hint">Kategori tidak ada di daftar? Ketik nama baru lalu klik "Tambah" di sebelah kanan.</span>
+          <label for="jabatan">Jabatan / Peran <span style="color:var(--red-500)">*</span></label>
+          <input type="text" id="jabatan" required placeholder="mis. Web Developer">
         </div>
         <div class="field">
-          <label for="desa_id">Letak Desa <span style="color:var(--red-500)">*</span></label>
-          <select id="desa_id" required>
-            <option value="">Pilih desa…</option>
-          </select>
+          <label for="urutan">Urutan Tampil</label>
+          <input type="number" id="urutan" placeholder="0" min="0" step="1">
         </div>
       </div>
 
-      <div class="inline-add">
-        <input type="text" id="newKategoriInput" placeholder="Tambah kategori baru…">
-        <button type="button" class="btn btn--outline btn--sm" id="btnAddKategori">Tambah Kategori</button>
+      <div class="field">
+        <label for="prodi">Program Studi</label>
+        <input type="text" id="prodi" placeholder="mis. Pend. Teknologi Informasi">
       </div>
 
       <div class="field">
-        <label for="deskripsi">Deskripsi</label>
-        <textarea id="deskripsi" rows="3" placeholder="Ceritakan singkat tentang lokasi ini…"></textarea>
+        <label for="deskripsi">Deskripsi Singkat</label>
+        <textarea id="deskripsi" rows="3" placeholder="Ceritakan singkat peran orang ini di proyek… (tampil di modal detail saat kartunya diklik)"></textarea>
       </div>
 
       <div class="field">
-        <label for="embed_code">Kode/Link Embed Iframe (opsional)</label>
-        <textarea id="embed_code" rows="2" placeholder="https://www.google.com/maps/embed?pb=... atau tempel seluruh kode <iframe>...</iframe>"></textarea>
-        <span class="hint">Boleh tempel link saja atau seluruh kode <code>&lt;iframe&gt;</code> dari Google Maps — link-nya akan diambil otomatis.</span>
-      </div>
-
-      <div class="field">
-        <label for="gambar_file">Foto Lokasi</label>
-        <input type="file" id="gambar_file" accept="image/png,image/jpeg,image/jpg,image/webp" multiple>
-        <span class="hint" id="gambarUploadStatus">Bisa unggah lebih dari 1 foto sekaligus (maks. 3MB / foto). Foto pertama jadi foto sampul.</span>
+        <label for="foto_file">Foto Profil</label>
+        <input type="file" id="foto_file" accept="image/png,image/jpeg,image/jpg,image/webp">
+        <span class="hint" id="fotoUploadStatus">Unggah 1 foto profil (maks. 3MB), sebaiknya persegi/kotak — akan ditampilkan bulat. Kosongkan kalau belum ada foto — akan ditampilkan inisial nama.</span>
         <div class="image-grid" id="imageGrid"></div>
       </div>
 
-      <div class="checkbox-field">
-        <input type="checkbox" id="tampil_beranda" checked>
-        <label for="tampil_beranda">
-          Tampilkan di Beranda Publik
-          <span class="hint">Kalau dicentang, titik lokasi ini jadi kandidat tampil di preview Beranda. Bisa juga diatur cepat lewat switch di tabel.</span>
-        </label>
+      <div class="field-row">
+        <div class="field">
+          <label for="instagram">Instagram</label>
+          <input type="text" id="instagram" placeholder="username atau URL profil">
+        </div>
+        <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="text" id="whatsapp" placeholder="mis. 6281234567890">
+        </div>
       </div>
 
-      <div class="field">
-        <label for="urutan_beranda">Urutan Prioritas Beranda (opsional)</label>
-        <input type="number" id="urutan_beranda" placeholder="mis. 1" min="0" step="1">
-        <span class="hint">Angka lebih kecil tampil lebih dulu di Beranda. Kosongkan kalau tidak perlu diprioritaskan — otomatis diurutkan dari yang terbaru.</span>
+      <div class="field-row">
+        <div class="field">
+          <label for="linkedin">LinkedIn</label>
+          <input type="text" id="linkedin" placeholder="username atau URL profil">
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="text" id="email" placeholder="nama@email.com">
+        </div>
       </div>
 
       <div class="form-actions">
         <button type="button" class="btn btn--outline" id="btnCancelModal">Batal</button>
-        <button type="submit" class="btn btn--primary" id="btnSaveLokasi">Simpan Titik Lokasi</button>
+        <button type="submit" class="btn btn--primary" id="btnSaveTim">Simpan Anggota</button>
       </div>
     </form>
   </div>
@@ -223,6 +213,6 @@
 <script src="js/admin-auth.js"></script>
 <script src="js/admin-partials.js"></script>
 <script src="js/admin-ui.js"></script>
-<script src="js/lokasi.js"></script>
+<script src="js/tim-inti.js"></script>
 </body>
 </html>

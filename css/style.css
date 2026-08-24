@@ -1328,3 +1328,169 @@ h1, h2, h3 {
 @media (max-width: 420px) {
   .team-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ---------- Development Team (Tim Inti Pengembang) ----------
+   Section khusus 5 anggota inti yang benar-benar mengerjakan situs ini
+   (beda dari daftar umum "Tim KKM Kelompok 05" di .team-grid). Data
+   diambil dari Supabase tabel `tim_inti`, dikelola lewat Panel Admin ->
+   Tim Inti (Dev Team). Lihat js/tim-inti-page.js. */
+.core-team-section { padding-top: 8px; padding-bottom: 12px; }
+
+.core-team-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 22px 16px;
+}
+
+.core-team-card {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.core-team-card__photo {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(150deg, #2a3f57, #10202f);
+  box-shadow: 0 0 0 3px var(--white), 0 0 0 4px var(--line), var(--shadow-sm);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+.core-team-card:hover .core-team-card__photo,
+.core-team-card:focus-visible .core-team-card__photo {
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 3px var(--white), 0 0 0 4px var(--blue), var(--shadow-sm);
+}
+.core-team-card__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Ikon kaca pembesar muncul di atas foto saat hover/fokus — supaya
+   jelas foto profilnya bisa diklik untuk lihat detail, bukan cuma
+   dekorasi. */
+.core-team-card__photo-hint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 29, 43, 0.45);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.core-team-card__photo-hint svg { width: 22px; height: 22px; }
+.core-team-card:hover .core-team-card__photo-hint,
+.core-team-card:focus-visible .core-team-card__photo-hint { opacity: 1; }
+.core-team-card__initials {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.4rem; font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.core-team-card__name {
+  margin: 12px 0 2px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--navy);
+  line-height: 1.3;
+}
+.core-team-card__prodi {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+.core-team-card__role {
+  margin: 4px 0 0;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+@media (max-width: 900px) {
+  .core-team-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .core-team-grid { grid-template-columns: repeat(2, 1fr); gap: 26px 12px; }
+  .core-team-card__photo { width: 84px; height: 84px; }
+}
+
+/* ---------- Modal detail anggota Tim Inti (pakai kerangka .lokasi-modal) ---------- */
+.person-modal__panel { max-width: 440px; }
+.person-modal__body { padding: 30px 26px 26px; text-align: center; }
+
+.person-modal__photo {
+  width: 108px;
+  height: 108px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0 auto 16px;
+  background: linear-gradient(150deg, #2a3f57, #10202f);
+  box-shadow: 0 0 0 4px var(--blue-tint);
+}
+.person-modal__photo img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+.person-modal__photo--initials {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 1.7rem; font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.person-modal__name { margin: 0 0 4px; font-size: 1.2rem; font-weight: 700; font-style: normal; color: var(--navy); }
+.person-modal__role {
+  display: inline-block;
+  margin: 0 0 3px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.person-modal__prodi { margin: 0 0 16px; font-size: 0.85rem; color: var(--ink-soft); }
+
+.person-modal__desc {
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  background: var(--blue-tint);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin: 0 0 18px;
+  white-space: pre-line;
+}
+
+.person-modal__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.person-modal__social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--navy);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.person-modal__social a:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.person-modal__social a svg { width: 17px; height: 17px; }

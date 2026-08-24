@@ -39,6 +39,10 @@
         <span class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 20c.6-3.4 3-5.4 5.5-5.4S14.4 16.6 15 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17.5" cy="8.5" r="2.4" stroke="currentColor" stroke-width="1.6"/><path d="M15.8 14.3c2.3.2 4 1.9 4.5 4.9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
         Tim Pengembang
       </a>
+      <a href="tim-inti.html" data-menu="tim-inti">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5 14.9 8.3l6.4.9-4.6 4.5 1.1 6.3L12 16.9l-5.8 3.1 1.1-6.3-4.6-4.5 6.4-.9L12 2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+        Tim Inti (Dev Team)
+      </a>
     </nav>
 
     <div class="sidebar__section-label">Pengaturan</div>
@@ -208,6 +212,43 @@
 
             <div class="form-actions" style="margin-top:16px;">
               <button type="submit" class="btn btn--primary" id="saveMapBtn">Simpan Peta</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="form-card" id="halaman-tim" style="grid-column:1/-1;">
+          <h3 style="margin-bottom:4px;">Halaman Tim Pengembang</h3>
+          <p class="hint" style="margin-bottom:14px;">
+            Judul section <strong>"Development Team"</strong> dan teks <strong>"Tentang Proyek"</strong> yang tampil
+            di halaman publik <code>tim-pengembang.html</code> (di bawah hero). Anggota Development Team sendiri
+            dikelola terpisah lewat menu <strong>Tim Inti (Dev Team)</strong>.
+          </p>
+
+          <form id="formHalamanTim">
+            <div class="field-row">
+              <div class="field">
+                <label for="dev_team_eyebrow">Label Kecil di Atas Judul</label>
+                <input type="text" id="dev_team_eyebrow" name="dev_team_eyebrow" placeholder="mis. Tim Inti">
+              </div>
+              <div class="field">
+                <label for="dev_team_title">Judul Section</label>
+                <input type="text" id="dev_team_title" name="dev_team_title" placeholder="mis. Development Team">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="tentang_proyek_judul">Judul "Tentang Proyek"</label>
+              <input type="text" id="tentang_proyek_judul" name="tentang_proyek_judul" placeholder="mis. Tentang Proyek">
+            </div>
+
+            <div class="field">
+              <label for="tentang_proyek_teks">Teks "Tentang Proyek"</label>
+              <textarea id="tentang_proyek_teks" name="tentang_proyek_teks" rows="5" placeholder="Ceritakan tentang proyek Peta Kedewan…"></textarea>
+              <span class="hint">Tampil apa adanya di kotak abu-abu "Tentang Proyek" pada halaman publik Tim Pengembang.</span>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn--primary" id="saveHalamanTimBtn">Simpan Halaman Tim Pengembang</button>
             </div>
           </form>
         </div>
