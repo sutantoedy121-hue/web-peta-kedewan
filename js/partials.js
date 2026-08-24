@@ -95,6 +95,15 @@ function applyBrandData(data) {
       img.src = data.logo_url;
       img.alt = data.site_name || 'Logo';
     });
+
+    // Favicon tab browser ikut logo yang sama. setKedewanFavicon()
+    // didefinisikan di js/header.js (dipanggil lebih dulu dari cache);
+    // di sini dipanggil lagi dengan data TERBARU dari Supabase, supaya
+    // favicon otomatis ikut berubah begitu admin ganti logo di
+    // Pengaturan Situs, tanpa perlu tunggu cache lama kedaluwarsa.
+    if (typeof window.setKedewanFavicon === 'function') {
+      window.setKedewanFavicon(data.logo_url);
+    }
   }
 
   const nameTargets = [document.getElementById('brandName'), document.getElementById('footerBrandName')];

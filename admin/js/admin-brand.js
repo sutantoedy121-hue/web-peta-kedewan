@@ -11,6 +11,25 @@
 (function () {
   const BRAND_CACHE_KEY = 'kedewanBrand';
 
+  // Favicon tab browser di Panel Admin ikut logo yang sama dengan
+  // situs publik (lihat js/header.js untuk versi situs publiknya).
+  // Didefinisikan terpisah di sini karena halaman admin tidak memuat
+  // js/header.js.
+  function setKedewanFavicon(url) {
+    if (!url) return;
+    try {
+      ['icon', 'shortcut icon', 'apple-touch-icon'].forEach((rel) => {
+        let link = document.querySelector(`link[rel="${rel}"]`);
+        if (!link) {
+          link = document.createElement('link');
+          link.rel = rel;
+          document.head.appendChild(link);
+        }
+        link.href = url;
+      });
+    } catch (e) { /* abaikan: favicon custom gagal dipasang, favicon default tetap dipakai */ }
+  }
+
   function applyBrandData(data) {
     const iconTargets = [
       document.getElementById('sidebarBrandIcon'),
@@ -25,6 +44,7 @@
         img.src = data.logo_url;
         img.alt = data.site_name || 'Logo';
       });
+      setKedewanFavicon(data.logo_url);
     }
 
     const nameTargets = [

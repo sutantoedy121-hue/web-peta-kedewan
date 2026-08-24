@@ -52,6 +52,35 @@
     brandLogoInner = '<img src="' + escAttr(brand.logo_url) + '" alt="' + escAttr(brand.site_name || 'Logo') + '" />';
   }
 
+  // CATATAN FAVICON: favicon tab browser ikut memakai logo yang sama
+  // dengan logo header (kolom `logo_url` di tabel `pengaturan`, diatur
+  // lewat Admin -> Pengaturan Situs -> "Logo Situs"). setKedewanFavicon()
+  // dipasang di window supaya bisa dipanggil lagi dari js/partials.js
+  // setelah data logo terbaru selesai diambil dari Supabase (lihat
+  // applyBrandData() di partials.js). Dipanggil di sini dulu pakai nilai
+  // dari cache, supaya favicon custom langsung tampil sejak awal (tidak
+  // perlu menunggu round-trip ke Supabase) kalau sebelumnya sudah pernah
+  // dimuat.
+  function setKedewanFavicon(url) {
+    if (!url) return;
+    try {
+      ['icon', 'shortcut icon', 'apple-touch-icon'].forEach(function (rel) {
+        var link = document.querySelector('link[rel="' + rel + '"]');
+        if (!link) {
+          link = document.createElement('link');
+          link.rel = rel;
+          document.head.appendChild(link);
+        }
+        link.href = url;
+      });
+    } catch (e) { /* abaikan: favicon custom gagal dipasang, favicon default tetap dipakai */ }
+  }
+  window.setKedewanFavicon = setKedewanFavicon;
+
+  if (brand && brand.logo_url) {
+    setKedewanFavicon(brand.logo_url);
+  }
+
   var brandNameText = (brand && brand.site_name) ? brand.site_name : 'Peta Kedewan';
   var brandTaglineHtml = (brand && brand.site_tagline) ? escText(brand.site_tagline) : 'Portal Peta &amp; UMKM Kecamatan Kedewan';
 
