@@ -187,12 +187,62 @@ function initNavToggle() {
   });
 }
 
+// ---------- Lightbox foto: klik gambar di galeri modal (Titik Lokasi /
+// UMKM) untuk melihatnya penuh & besar. Dibuat sekali di sini (bukan di
+// lokasi-page.js / umkm-page.js) karena kedua halaman itu memuat file ini,
+// dan galeri modalnya dirender ulang tiap kali modal dibuka — jadi
+// listener-nya dipasang lewat event delegation di document, bukan per-img.
+function initImageLightbox() {
+  if (document.getElementById('imgLightbox')) return; // sudah pernah dibuat
+
+  const lightbox = document.createElement('div');
+  lightbox.className = 'img-lightbox';
+  lightbox.id = 'imgLightbox';
+  lightbox.innerHTML = `
+    <button type="button" class="img-lightbox__close" id="imgLightboxClose" aria-label="Tutup">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <img id="imgLightboxImg" src="" alt="" />
+    <span class="img-lightbox__hint">Klik di luar foto atau tekan Esc untuk menutup</span>
+  `;
+  document.body.appendChild(lightbox);
+
+  const imgEl = document.getElementById('imgLightboxImg');
+
+  function openLightbox(src, alt) {
+    imgEl.src = src;
+    imgEl.alt = alt || '';
+    lightbox.classList.add('is-open');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('is-open');
+  }
+
+  // Delegasi: tangkap klik pada foto di dalam galeri modal, di mana pun
+  // modalnya berada (id="lokasiModalBody" atau id="umkmModalBody").
+  document.addEventListener('click', (e) => {
+    const galleryImg = e.target.closest('.lokasi-modal__gallery img');
+    if (galleryImg) {
+      openLightbox(galleryImg.src, galleryImg.alt);
+      return;
+    }
+    // Klik foto besar itu sendiri, atau area gelap di sekitarnya -> tutup.
+    if (e.target === lightbox || e.target === imgEl) closeLightbox();
+  });
+
+  document.getElementById('imgLightboxClose').addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+}
+
 function initPartials() {
   // Header & footer sudah ada di HTML sejak awal, jadi langsung ambil
   // elemennya di sini — tidak perlu menunggu fetch lagi. Event
   // 'partials:loaded' tetap di-dispatch untuk jaga-jaga kalau ada script
   // lama yang masih memakainya, tapi tidak lagi jadi satu-satunya jalan.
   initNavToggle();
+  initImageLightbox();
   document.dispatchEvent(new Event('partials:loaded'));
 
   if (typeof window.initHeaderSearch === 'function') window.initHeaderSearch();

@@ -183,7 +183,7 @@ function openLokasiModal(loc) {
   const fotos = (loc.gambar_urls && loc.gambar_urls.length > 0) ? loc.gambar_urls : (loc.gambar_url ? [loc.gambar_url] : []);
 
   const galeri = fotos.length > 0
-    ? `<div class="lokasi-modal__gallery">${fotos.map((url) => `<img src="${lokasiEscapeHtml(url)}" alt="${lokasiEscapeHtml(loc.nama_lokasi)}" />`).join('')}</div>`
+    ? `<div class="lokasi-modal__gallery">${fotos.map((url) => `<div class="lokasi-modal__slide"><img src="${lokasiEscapeHtml(url)}" alt="${lokasiEscapeHtml(loc.nama_lokasi)}" /></div>`).join('')}</div>`
     : `<div class="lokasi-modal__gallery lokasi-modal__gallery--empty">${lokasiIconPin}</div>`;
 
   const peta = loc.embed_code

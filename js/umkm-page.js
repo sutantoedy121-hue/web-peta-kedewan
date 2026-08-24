@@ -191,7 +191,7 @@ function openUmkmModal(item) {
   const fotos = (item.gambar_urls && item.gambar_urls.length > 0) ? item.gambar_urls : (item.gambar_url ? [item.gambar_url] : []);
 
   const galeri = fotos.length > 0
-    ? `<div class="lokasi-modal__gallery">${fotos.map((url) => `<img src="${umkmEscapeHtml(url)}" alt="${umkmEscapeHtml(item.nama_produk)}" />`).join('')}</div>`
+    ? `<div class="lokasi-modal__gallery">${fotos.map((url) => `<div class="lokasi-modal__slide"><img src="${umkmEscapeHtml(url)}" alt="${umkmEscapeHtml(item.nama_produk)}" /></div>`).join('')}</div>`
     : `<div class="lokasi-modal__gallery lokasi-modal__gallery--empty">${umkmIconStore}</div>`;
 
   const waNumber = (item.no_wa || '').replace(/[^\d]/g, '');
