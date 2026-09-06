@@ -1,0 +1,9 @@
+{
+  "name": "web-peta-kedewan",
+  "version": "1.0.0",
+  "description": "Website Peta Kedewan - Titik Lokasi & UMKM Kecamatan Kedewan",
+  "scripts": {
+    "dev": "npx serve . -l 3000",
+    "start": "npx serve . -l 3000"
+  }
+}

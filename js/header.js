@@ -22,10 +22,13 @@
 // pertama kali / localStorage kosong) — sama seperti dulu.
 
 (function () {
-  var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var currentPath = (location.pathname || '/').toLowerCase().replace(/\/$/, '');
+  var currentFile = (currentPath.split('/').pop() || 'index.html').toLowerCase();
+  var currentBase = currentFile.replace(/\.html$/, '') || 'index';
 
   function navItem(href, label) {
-    var isActive = href === page;
+    var hrefBase = href.toLowerCase().replace(/\.html$/, '');
+    var isActive = (currentBase === hrefBase) || (currentBase === 'index' && (hrefBase === 'index' || hrefBase === ''));
     var attrs = isActive ? ' class="active" aria-current="page"' : '';
     return '<li><a href="' + href + '"' + attrs + '>' + label + '</a></li>';
   }

@@ -1,13 +1,12 @@
 // partials.js — mengisi data dinamis (logo, nama situs, footer) ke header &
-// footer. Header sekarang dipisah ke js/header.js dan ditulis lewat
-// document.write() SINKRON (bukan fetch), sedangkan footer masih ditulis
-// langsung di tiap halaman (index.html, lokasi.html, umkm.html,
-// tim-pengembang.html). Sebelumnya header/footer sama-sama dimuat via
-// fetch ke header/header.html & footer/footer.html — itu menyebabkan
-// header sempat "kosong"/berkedip setiap kali pindah menu (lihat
-// CATATAN_SETUP.md). Karena document.write() tidak melakukan request
-// jaringan, header tetap tidak berkedip meski sumbernya sudah dipisah
-// lagi ke satu file.
+// footer.
+
+// Auto-load efek 3D interaktif
+if (!document.querySelector('script[src*="3d-effects.js"]')) {
+  const s3d = document.createElement('script');
+  s3d.src = 'js/3d-effects.js';
+  document.head.appendChild(s3d);
+}
 
 function escapeHtmlPartial(str) {
   const div = document.createElement('div');

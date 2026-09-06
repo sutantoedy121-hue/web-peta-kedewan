@@ -1,6 +1,6 @@
 // admin/js/login.js
 // Login admin memakai Supabase Auth (email + password).
-// Kalau sesi sudah aktif (misal buka lagi tab lama), langsung lempar ke dashboard.
+// Kalau sesi sudah aktif, langsung lempar ke dashboard.
 
 const loginForm = document.getElementById('loginForm');
 const loginBtn = document.getElementById('loginBtn');
@@ -11,18 +11,22 @@ function showLoginError(message) {
   loginError.classList.add('is-visible');
 }
 
+function resetLoginButton() {
+  loginBtn.disabled = false;
+  loginBtn.textContent = 'Masuk';
+}
+
 (async () => {
   try {
     const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session) window.location.href = 'index.html';
+    if (session && session.user) {
+      window.location.replace('index.html');
+    }
   } catch (err) {
     console.error('Gagal cek sesi awal:', err);
   }
 })();
 
-// Bungkus request dengan batas waktu 10 detik supaya tombol tidak
-// menggantung selamanya kalau Supabase tidak merespons (mis. project
-// sedang paused / koneksi internet putus).
 function withTimeout(promise, ms) {
   return Promise.race([
     promise,
@@ -30,11 +34,6 @@ function withTimeout(promise, ms) {
       setTimeout(() => reject(new Error('TIMEOUT')), ms)
     ),
   ]);
-}
-
-function resetLoginButton() {
-  loginBtn.disabled = false;
-  loginBtn.textContent = 'Masuk';
 }
 
 loginForm.addEventListener('submit', async (e) => {
@@ -47,7 +46,7 @@ loginForm.addEventListener('submit', async (e) => {
   const password = document.getElementById('password').value;
 
   try {
-    const { error } = await withTimeout(
+    const { data, error } = await withTimeout(
       supabaseClient.auth.signInWithPassword({ email, password }),
       10000
     );
@@ -62,12 +61,16 @@ loginForm.addEventListener('submit', async (e) => {
       return;
     }
 
-    window.location.href = 'index.html';
+    loginBtn.textContent = 'Berhasil! Mengalihkan…';
+    setTimeout(() => {
+      window.location.replace('index.html');
+    }, 150);
+
   } catch (err) {
     console.error(err);
     showLoginError(
       err.message === 'TIMEOUT'
-        ? 'Server tidak merespons. Cek koneksi internet atau status project Supabase kamu (kemungkinan sedang paused).'
+        ? 'Server tidak merespons. Cek koneksi internet atau status project Supabase kamu.'
         : 'Terjadi kesalahan tak terduga. Cek console (F12) untuk detail.'
     );
     resetLoginButton();
